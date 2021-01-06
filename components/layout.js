@@ -8,7 +8,7 @@ import { FaLinkedin, FaReact, FaGithubSquare } from 'react-icons/fa';
 
 // import styles from '../styles/index.scss'
 
-
+const prefix = "/my-page"
 class Layout extends React.Component {
     constructor(props) {
         super(props)
@@ -47,7 +47,7 @@ class Layout extends React.Component {
                 
                 <div className="main">
                     <Navbar color="light" light expand="md">
-                        <NavbarBrand href="/">My-Blog</NavbarBrand>
+                        <NavbarBrand href={prefix}>My-Blog</NavbarBrand>
                         <NavbarToggler onClick={this.toggleNav} />
                         <Collapse isOpen={this.isNavOpen} navbar>
                         <Nav className="mr-auto" navbar>

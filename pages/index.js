@@ -6,6 +6,7 @@ import {parseDate} from '../utils/parseUtils'
 
 import me from '../me'
 
+const prefix = "/my-page"
 
 export default function Home(props) {
 
@@ -55,7 +56,7 @@ function RenderAbout({about, portrait}) {
           <p>{about}</p>
         </Col>
         <Col md = {6}>
-            <img className ="portrait" src={portrait} alt="head portrait"></img>
+            <img className ="portrait" src={prefix + portrait} alt="head portrait"></img>
         </Col>
       </Row>
     </Container>
