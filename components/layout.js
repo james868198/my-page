@@ -8,7 +8,7 @@ import { FaLinkedin, FaReact, FaGithubSquare } from 'react-icons/fa';
 
 // import styles from '../styles/index.scss'
 
-const prefix = "/my-page"
+const prefix = "/my-page/"
 class Layout extends React.Component {
     constructor(props) {
         super(props)

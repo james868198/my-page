@@ -6,7 +6,7 @@ import {parseDate} from '../utils/parseUtils'
 
 import me from '../me'
 
-const prefix = "/my-page"
+const prefix = "/my-page/"
 
 export default function Home(props) {
 
