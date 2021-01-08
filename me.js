@@ -1,6 +1,7 @@
 export default {
     name: "James Huang",
-    portrait: "static/images/husky.jpg",
+    title: "Full-Stack Developer From Taiwan.",
+    portrait: "static/images/me.JPG",
     email: "jameshuang198681@gmail.com ",
     description: "I'm a software engineer based in San Jose, CA specializing in web development, and interested in Machine Learning, cloud development, etc.",
     about: "Hi! I'm James, a software engineer from Taiwan. I graduated from Santa Clara University in June 2020 and obtained my Master's Degree in Computer Science & Engineering. I'm a self-starter who is hardworking and ambitious to face any challenges. My goal in my engineer journey is to build products that provide the best performance and user experience.",
@@ -106,36 +107,48 @@ export default {
     projects: [
         {
             name: "Weather 3D Application",
-            description: "test1",
-            image: "",
-            link: "https://weather3dapp.herokuapp.com/",
+            description: "A web application demonstrating a city's real-time weather with 3D scenario by Three.js.",
+            image: "static/images/weather3D.png",
+            links: [
+                { 
+                    name: "github",
+                    link: "https://github.com/james868198/Threejs-weatherApp",
+                },
+                { 
+                    name: "demo",
+                    link: "https://weather3dapp.herokuapp.com/",
+                }
+            ],
             tags: [
                 "ThreeJS",
                 "HTML",
                 "WeatherAPI",
             ]
+        },
+        {
+            name: "Multiplayer Browser Game",
+            description: "A SPA multiplayer browser board game built by Socket.IO, Vue.js and Node.js",
+            image: "",
+            links: [
+                { 
+                    name: "github",
+                    link: "https://github.com/james868198/Nuxt-BoardGame-Avalon"
+                }
+            ],
+            tags: [
+                "VueJS",
+                "Node.js",
+                "WebSocket",
+            ]
         }
-        // {
-        //     name: "Multiplayer Browser Game",
-        //     description: "test11",
-        //     image: "",
-        //     link: "",
-        //     tags: [
-        //         "VueJS",
-        //         "Node.js",
-        //         "WebSocket",
-        //     ]
-        // }
     ],
-    medias: [
+    media: [
         {
             name: "linkedin",
-            icon: "weather3D_demo.png",
             link: "https://www.linkedin.com/in/yu-chan-huang/"
         },
         {
             name: "github",
-            icon: "",
             link: "https://github.com/james868198"
         }
     ]

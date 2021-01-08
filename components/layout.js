@@ -1,24 +1,22 @@
 import React from 'react'
 // import Router from 'next/router'
 import Head from 'next/head'
-import Link from 'next/link'
 import { Container, Row, Col, Nav, NavItem, Button, Form, NavLink, Collapse,
          Navbar, NavbarToggler, NavbarBrand, DropdownMenu,DropdownItem, UncontrolledDropdown, DropdownToggle } from 'reactstrap'
-import { FaLinkedin, FaReact, FaGithubSquare } from 'react-icons/fa';
+import { FaLinkedin, FaReact, FaGithubSquare, FaArrowUp } from 'react-icons/fa';
+import { assetsPrefix } from '../next.config';
+const prefix = assetsPrefix + '/'
 
-// import styles from '../styles/index.scss'
-
-const prefix = "/my-page/"
 class Layout extends React.Component {
     constructor(props) {
         super(props)
 
         this.toggleNav = this.toggleNav.bind(this);
-        this.toggleModal = this.toggleModal.bind(this);
+        // this.toggleModal = this.toggleModal.bind(this);
 
         this.state = {
-            isNavOpen: false,
-            isModalOpen: false
+            isNavOpen: false
+            // isModalOpen: false
         }
     }
 
@@ -27,29 +25,61 @@ class Layout extends React.Component {
             isNavOpen: !this.state.isNavOpen
         });
     }
-    
-    toggleModal() {
+    toggleMediaBar() {
         this.setState({
-            isModalOpen: !this.state.isModalOpen
+            isMediaBarOpen: !this.state.isMediaBarOpen
         });
     }
-
+    
+    // toggleModal() {
+    //     this.setState({
+    //         isModalOpen: !this.state.isModalOpen
+    //     });
+    // }
+    
     render() {
-        
+        const mediaBar = (!this.props.media) ? <div></div> : <div className="social-media">
+            <ul className="social-media-container">
+                <li className="arrow">
+                    <FaArrowUp size={32}/>
+                </li>
+                {this.props.media.map((media, mediaId) => {
+                    let mediaItem = <div></div>;
+                    switch (media.name) {
+                      case "linkedin":
+                        mediaItem = <a href={media.link} target="_blank"><FaLinkedin size={32}/></a>
+                        break;
+                      case "github":
+                        mediaItem = <a href={media.link} target="_blank"><FaGithubSquare size={32}/></a>
+                        break;
+                      default:
+                        break;
+                    }
+                    return (
+                    <li className="social-media-icon" key={mediaId}>
+                        {mediaItem}
+                    </li>
+                    )}
+                )}
+            </ul>
+        </div>
+
         return (
             <React.Fragment>
                 <Head>
                     <meta charSet="UTF-8" />
                     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                    <title>{this.props.title || 'My-Blog'}</title>
+                    <title>{this.props.title || 'My-Page'}</title>
                     {/* <style dangerouslySetInnerHTML={{__html: styles}}/> */}
+                    
+
                 </Head>
                 
                 <div className="main">
                     <Navbar color="light" light expand="md">
-                        <NavbarBrand href={prefix}>My-Blog</NavbarBrand>
+                        <NavbarBrand href={prefix}>My-Page</NavbarBrand>
                         <NavbarToggler onClick={this.toggleNav} />
-                        <Collapse isOpen={this.isNavOpen} navbar>
+                        <Collapse isOpen={this.state.isNavOpen} navbar>
                         <Nav className="mr-auto" navbar>
                             <NavItem>
                                 <NavLink href="#about">About</NavLink>
@@ -60,43 +90,19 @@ class Layout extends React.Component {
                             <NavItem>
                                 <NavLink href="#project">Project</NavLink>
                             </NavItem>
-                            
-                            {/* <UncontrolledDropdown nav inNavbar>
-                                <DropdownToggle nav caret>
-                                    Options
-                                </DropdownToggle>
-                                <DropdownMenu right>
-                                    <DropdownItem>
-                                    Option 1
-                                    </DropdownItem>
-                                    <DropdownItem>
-                                    Option 2
-                                    </DropdownItem>
-                                    <DropdownItem divider />
-                                    <DropdownItem>
-                                    Reset
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </UncontrolledDropdown> */}
+                            <NavItem>
+                                <NavLink href="#contact">Contact</NavLink>
+                            </NavItem>
                         </Nav>
                         </Collapse>
                     </Navbar>
                     {this.props.children}
                     <div className="footer">
-                        <h5>My-Blog v1, Made with <FaReact/> ReactJS</h5>
+                        <h5>My-Page v1. Made with <FaReact/> ReactJS</h5>
                     </div>
                 </div>
-                <div className="social-media">
-                    <ul className="social-media-container">
-                        <li className="social-media-icon">
-                            <a><FaLinkedin size={32}/></a>
-                        </li>
-                        <li className="social-media-icon">
-                            <a><FaGithubSquare size={32}/></a>
-                        </li>
-                    </ul>
-                </div>
-
+                {mediaBar}
+            <script src="https://cdn.rawgit.com/progers/pathseg/master/pathseg.js"></script>
             </React.Fragment>
         )
     }

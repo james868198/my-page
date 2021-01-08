@@ -1,62 +1,91 @@
 import React from 'react'
-import { Container, Row, Col, ListGroup, ListGroupItem  } from 'reactstrap'
+import { Container, Row, Col, Card, CardBody, CardTitle, CardText, CardImg, CardLink, Button } from 'reactstrap'
+import { FaFolder, FaGithub } from 'react-icons/fa';
 
 import Layout from '../components/layout'
-import {parseDate} from '../utils/parseUtils'
+import { parseDate } from '../utils/parseUtils'
+import { assetsPrefix } from '../next.config';
 
 import me from '../me'
 
-const prefix = "/my-page/"
+const prefix = assetsPrefix + '/'
 
 export default function Home(props) {
 
   return (
     
-    <Layout {...props}>
-      <RenderIntroBoard name = {me.name} desc = {me.description} />
-      <RenderAbout about = {me.about} portrait = {me.portrait} />
+    <Layout {...props} media={me.media}>
+      <RenderIntroBoard name = {me.name} desc = {me.description}  title = {me.title} />
+      <RenderAbout about = {me.about} portrait = {me.portrait} skills = {me.skills} />
       <RenderWorks works = {me.experiences} />
       <RenderProject projects = {me.projects} />
       <RenderContact email = {me.email} contact = {me.contact} />
     </Layout>
   )
 }
-function RenderIntroBoard({name, desc}) {
+function RenderIntroBoard({name, desc, title}) {
   if (!name) {
     return(
         <div></div>
     );
   }
   return (
-    <Container className="board-type-full">
-      <Row>
-        <Col id="home" md = {12}>
-            <h1>{name}</h1>
-        </Col>
-        <Col md = {12}>
-            <p>{desc}</p>
-        </Col>
-      </Row>
-    </Container>
+    <React.Fragment>
+      <Container className="intro">
+        <table style = {{height:  "100%"}}>
+          <tbody>
+            <tr>
+              <td className="align-middle">
+                <div className="before-name">Hi! My name is</div>
+                <div className="name">{name}.</div>
+                <div className="title">{title}</div>
+                <div className="description">{desc}</div>              
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Container>
+    </React.Fragment>
   )
 }
-function RenderAbout({about, portrait}) {
+function RenderAbout({about, portrait, skills}) {
   if (!about) {
     return(
         <div></div>
     );
   }
   return (
-    <Container id="about" className="board-type-1">
+    <Container id="about" className="about-board">
       <Row>
-        <Col md = {12}>
-          <h1>About me</h1>
+        <Col md = {{ size: 8, order: 2, offset: 1 }} className='board-title after-line'>
+          About Me
+        </Col>
+      </Row>
+      <Row>
+        <Col md = {6}>
+          <div className="avatar">
+            <img src={prefix + portrait} alt="Avatar"></img>
+          </div>
         </Col>
         <Col md = {6}>
-          <p>{about}</p>
-        </Col>
-        <Col md = {6}>
-            <img className ="portrait" src={prefix + portrait} alt="head portrait"></img>
+          
+          <Container fluid={true} className="content-container">
+            <Row className="content">
+              {about}
+            </Row>
+            <Row className="skill-title">
+              The skills I have:
+            </Row>
+            <Row>
+              {skills.map((skill, skillId) => {
+                return (
+                  <Col md = {4} sm = {4} key={skillId} className="skill">
+                    {skill.name}
+                  </Col>
+                )}
+              )}
+            </Row>
+          </Container>
         </Col>
       </Row>
     </Container>
@@ -69,34 +98,33 @@ function RenderWorks({works}) {
       );
   }
   return (
-      <Container id="work" className="board-type-1" > 
-        <Row className="justify-content-md-center">
-          <Col md = {12}>
-              <h1>My Experiences</h1>
+      <Container id="work" className="work-board" > 
+        
+        <Row>
+          <Col md = {{ size: 8, order: 1, offset: 0 }} className='board-title after-line'>
+            My Experiences
           </Col>
-          
+        </Row>
+        <Row className="work-board-inner justify-content-md-center">
           {works.map((work, workId) => {
               return (
-                <React.Fragment key={workId}>   
-                  <Col md = {11}>
-                    <h4>{work.title} - {work.institution}</h4>
-                    <h6>{parseDate(work.start)} - {parseDate(work.end)}</h6>
-                    <ul className="work-detail">
-                        {work.description.map((desc, descId) => {
-                          return (
-                            <li key={descId}>{desc}</li>
-                          )})
-                        }
-                    </ul>
-                  </Col>
-                </React.Fragment>
+                <Col md = {10} key= {workId}>
+                  <h4>{work.title} - {work.institution}</h4>
+                  <h6>{parseDate(work.start)} - {parseDate(work.end)}</h6>
+                  <ul className="work-detail">
+                      {work.description.map((desc, descId) => {
+                        return (
+                          <li key={descId}>{desc}</li>
+                        )})
+                      }
+                  </ul>
+                </Col>
               );
           })}
         </Row>
       </Container>
   );
 }
-
 function RenderProject({projects}) {
   if (!projects) {
       return(
@@ -104,40 +132,82 @@ function RenderProject({projects}) {
       );
   }
   return (
-      <Container id="project" className="board-type-1">   
+      <Container id="project" className="project-board"> 
+        <Row className="justify-content-md-center board-title">
+          <Col>Some Things I've Built</Col>
+        </Row>
         <Row className="justify-content-md-center">
-          <Col md = {12}>
-              <h1>Some Things I've Built</h1>
-          </Col>
-          
-          {projects.map((project, projectId) => {
-            return (
-              <React.Fragment key={projectId}>   
-                <Col md = {10}>
-                  <a href={project.link}> <h4>{project.name}</h4></a>
-                  <p>{project.description}</p>
-                </Col>
-                <Col md = {10}>
+            {projects.map((project, projectId) => {
+              let image = <FaFolder size={50}/>
+              let links = <div></div>;
+              let tags = <div></div>;
 
+              if (project.image) {
+                image = <CardImg top width="100%" src={prefix + project.image} alt="CardImage" />
+              }
+              if (project.tags) {
+                tags = <div className="project-tags">{project.tags.map((tag, projectTagId) => {
+                  return (
+                    <div className="tag" key={projectTagId}>{tag}</div>
+                  )
+                })}</div>
+              }
+              if (project.links) {
+                links = <div className="project-links">{project.links.map((link, projectLinkId) => {
+                  let linkItem = <div></div>;
+                  switch (link.name) {
+                    case "demo":
+                      linkItem = <Button outline color="secondary" size="sm">Demo</Button>
+                      break;
+                    case "github":
+                      linkItem = <FaGithub size={32}/>
+                      break;
+                    default:
+                      break;
+                  }
+                  return (
+                    <CardLink target="_blank" href={link.link} key={projectLinkId}>{linkItem}</CardLink>
+                  )
+                })}</div>;                
+              }
+              
+              return (
+                <Col lg = {4} md = {10} sm = {10} key={projectId} className="project-container">
+                  <Card>
+                    
+                    <CardBody className="project-image">
+                      {image}
+                    </CardBody>
+                    <CardBody className="project-title">
+                      <CardTitle tag="h4">{project.name}</CardTitle>
+                      {tags}
+                    </CardBody>
+                    <CardBody className="project-text">
+                      <CardText>{project.description}</CardText>
+                      {links}
+                    </CardBody>
+                  </Card>
                 </Col>
-              </React.Fragment>
-            );
-          })}
+              );
+            })}
         </Row>
       </Container>
   );
 }
-
 function RenderContact({email, contact}) {
   return (
-    <Container id="contact" className="board-type-full contact-container">
-      <Row className="justify-content-md-center">
-        <Col md = {6}>
-            <h1>Get In Touch!</h1>
-            <p>{contact} </p>
-            My email is:
-            <h4>{email}</h4>
-        </Col>
+    <Container id="contact" className="contact-board">
+      <Row className="justify-content-md-center board-title">
+        <Col className="before-line after-line">Get In Touch!</Col>
+      </Row>
+      <Row className="justify-content-center">
+        <Col className="contact-board-content">{contact}</Col>
+      </Row>
+      <Row className="justify-content-center">
+        <Col>My email is:</Col>
+      </Row>
+      <Row className="justify-content-center contact-board-info">
+        <Col className="email">{email}</Col>
       </Row>
     </Container>
   )
