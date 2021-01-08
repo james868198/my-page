@@ -1,9 +1,13 @@
 import React from 'react'
 // import Router from 'next/router'
 import Head from 'next/head'
+import Link from 'next/link'
+
 import { Container, Row, Col, Nav, NavItem, Button, Form, NavLink, Collapse,
          Navbar, NavbarToggler, NavbarBrand, DropdownMenu,DropdownItem, UncontrolledDropdown, DropdownToggle } from 'reactstrap'
 import { FaLinkedin, FaReact, FaGithubSquare, FaArrowUp } from 'react-icons/fa';
+import { Fade, Stagger } from 'react-animation-components';
+
 import { assetsPrefix } from '../next.config';
 const prefix = assetsPrefix + '/'
 
@@ -39,6 +43,7 @@ class Layout extends React.Component {
     
     render() {
         const mediaBar = (!this.props.media) ? <div></div> : <div className="social-media">
+            <Fade in duration={1000}>
             <ul className="social-media-container">
                 <li className="arrow">
                     <FaArrowUp size={32}/>
@@ -62,6 +67,7 @@ class Layout extends React.Component {
                     )}
                 )}
             </ul>
+            </Fade>
         </div>
 
         return (
@@ -82,17 +88,37 @@ class Layout extends React.Component {
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                         <Nav className="mr-auto" navbar>
                             <NavItem>
-                                <NavLink href="#about">About</NavLink>
+                                <Link href={"/#about"}>
+                                    <NavLink>About</NavLink>
+                                </Link>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="#work">Work</NavLink>
+                                <Link href={"/#work"}>
+                                    <NavLink>Work</NavLink>
+                                </Link>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="#project">Project</NavLink>
+                                <Link href={"/#project"}>
+                                    <NavLink>Project</NavLink>
+                                </Link>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="#contact">Contact</NavLink>
+                                <Link href={"/#contact"}>
+                                    <NavLink>Contact</NavLink>
+                                </Link>
                             </NavItem>
+                            {/* <NavItem>
+                                <NavLink href={"/#about"}>About</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink href={prefix + "#work"}>Work</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink href={prefix + "#project"}>Project</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink href={prefix + "#contact"}>Contact</NavLink>
+                            </NavItem> */}
                         </Nav>
                         </Collapse>
                     </Navbar>

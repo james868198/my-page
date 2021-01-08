@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Row, Col, Card, CardBody, CardTitle, CardText, CardImg, CardLink, Button } from 'reactstrap'
 import { FaFolder, FaGithub } from 'react-icons/fa';
+import { Fade, Stagger } from 'react-animation-components';
 
 import Layout from '../components/layout'
 import { parseDate } from '../utils/parseUtils'
@@ -24,36 +25,29 @@ export default function Home(props) {
   )
 }
 function RenderIntroBoard({name, desc, title}) {
-  if (!name) {
-    return(
-        <div></div>
-    );
-  }
   return (
     <React.Fragment>
-      <Container className="intro">
-        <table style = {{height:  "100%"}}>
-          <tbody>
-            <tr>
-              <td className="align-middle">
-                <div className="before-name">Hi! My name is</div>
-                <div className="name">{name}.</div>
-                <div className="title">{title}</div>
-                <div className="description">{desc}</div>              
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </Container>
+      <Stagger in>
+        <Container className="intro">  
+          <table style = {{height:  "100%"}}>
+            <tbody>
+              <tr>
+                <td className="align-middle">
+                
+                  <div className="before-name">Hi! My name is</div>
+                  <Fade in duration={1000}><div className="name">{name}.</div></Fade>
+                  <Fade in duration={2000}><div className="title">{title}</div></Fade>
+                  <Fade in duration={2000}><div className="description">{desc}</div></Fade>           
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Container>
+      </Stagger>
     </React.Fragment>
   )
 }
 function RenderAbout({about, portrait, skills}) {
-  if (!about) {
-    return(
-        <div></div>
-    );
-  }
   return (
     <Container id="about" className="about-board">
       <Row>
@@ -203,11 +197,10 @@ function RenderContact({email, contact}) {
       <Row className="justify-content-center">
         <Col className="contact-board-content">{contact}</Col>
       </Row>
-      <Row className="justify-content-center">
-        <Col>My email is:</Col>
-      </Row>
       <Row className="justify-content-center contact-board-info">
-        <Col className="email">{email}</Col>
+        <Col className="email">
+          <a href={'mailto:' + email} ><Button outline color="secondary" size="lg" >Say Hello!</Button></a>  
+        </Col>
       </Row>
     </Container>
   )

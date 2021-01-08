@@ -1,7 +1,7 @@
 export default {
     name: "James Huang",
     title: "Full-Stack Developer From Taiwan.",
-    portrait: "static/images/me.JPG",
+    portrait: "static/images/me.jpg",
     email: "jameshuang198681@gmail.com ",
     description: "I'm a software engineer based in San Jose, CA specializing in web development, and interested in Machine Learning, cloud development, etc.",
     about: "Hi! I'm James, a software engineer from Taiwan. I graduated from Santa Clara University in June 2020 and obtained my Master's Degree in Computer Science & Engineering. I'm a self-starter who is hardworking and ambitious to face any challenges. My goal in my engineer journey is to build products that provide the best performance and user experience.",
