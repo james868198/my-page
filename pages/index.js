@@ -1,7 +1,10 @@
 import React from 'react'
+import { useState, useRef, useEffect } from 'react'
+
 import { Container, Row, Col, Card, CardBody, CardTitle, CardText, CardImg, CardLink, Button } from 'reactstrap'
 import { FaFolder, FaGithub } from 'react-icons/fa';
 import { Fade, Stagger } from 'react-animation-components';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import Layout from '../components/layout'
 import { parseDate } from '../utils/parseUtils'
@@ -9,18 +12,60 @@ import { assetsPrefix } from '../next.config';
 
 import me from '../me'
 
-const prefix = assetsPrefix + '/'
+const prefix = assetsPrefix + '/';
+
 
 export default function Home(props) {
+  const [scrollTop, setScrollTop] = useState(0);
+  const [aboutIn, setAboutIn] = useState(0);
+  const [workIn, setWorkIn] = useState(0);
+  const [projectIn, setProjectIn] = useState(0);
+  const [contactIn, setContactIn] = useState(0);
 
-  return (
+  function handleScroll() {
+    const element = document.getElementById("main");
+    // console.log('layout handleScroll', element.scrollTop);
+    setScrollTop(element.scrollTop);
+  }
+
+  useEffect(() => {
+    let height = -200;
+    let el = document.getElementById("intro");
+    if (el.offsetHeight) {
+      height = height + el.offsetHeight;
+      setAboutIn(height);
+      // console.log('height:',height);
+    }
+    el = document.getElementById("about");
+    if (el.offsetHeight) {
+      height = height + el.offsetHeight;
+      setWorkIn(height);
+      // console.log('height:',height);
+    }
+    el = document.getElementById("work");
+    if (el.offsetHeight) {
+      height = height + el.offsetHeight;
+      setProjectIn(height);
+      // console.log('height:',height);
+    }
+    el = document.getElementById("project");
+    if (el.offsetHeight) {
+      height = height + el.offsetHeight;
+      setContactIn(height);
+      // console.log('height:',height);
+    }
     
-    <Layout {...props} media={me.media}>
-      <RenderIntroBoard name = {me.name} desc = {me.description}  title = {me.title} />
-      <RenderAbout about = {me.about} portrait = {me.portrait} skills = {me.skills} />
-      <RenderWorks works = {me.experiences} />
-      <RenderProject projects = {me.projects} />
-      <RenderContact email = {me.email} contact = {me.contact} />
+  },[]);
+  
+  return (
+    <Layout {...props} media={me.media} >
+      <div id="main" style={{position: "relative", height:"100%", overflow:"scroll"}} onScroll = {handleScroll}>
+        <RenderIntroBoard  name = {me.name} desc = {me.description}  title = {me.title} />
+        <RenderAbout show={scrollTop>=aboutIn} about = {me.about} portrait = {me.portrait} skills = {me.skills} />
+        <RenderWorks show={scrollTop>=workIn} works = {me.experiences} />
+        <RenderProject show={scrollTop>=projectIn} projects = {me.projects} />
+        <RenderContact show={scrollTop>=contactIn} email = {me.email} contact = {me.contact} />
+      </div>
     </Layout>
   )
 }
@@ -28,7 +73,7 @@ function RenderIntroBoard({name, desc, title}) {
   return (
     <React.Fragment>
       <Stagger in>
-        <Container className="intro">  
+        <Container id="intro" className="intro">  
           <table style = {{height:  "100%"}}>
             <tbody>
               <tr>
@@ -47,51 +92,56 @@ function RenderIntroBoard({name, desc, title}) {
     </React.Fragment>
   )
 }
-function RenderAbout({about, portrait, skills}) {
+function RenderAbout({about, portrait, skills, show}) {
   return (
-    <Container id="about" className="about-board">
-      <Row>
-        <Col md = {{ size: 8, order: 2, offset: 1 }} className='board-title after-line'>
-          About Me
-        </Col>
-      </Row>
-      <Row>
-        <Col md = {6}>
-          <div className="avatar">
-            <img src={prefix + portrait} alt="Avatar"></img>
-          </div>
-        </Col>
-        <Col md = {6}>
-          
-          <Container fluid={true} className="content-container">
-            <Row className="content">
-              {about}
-            </Row>
-            <Row className="skill-title">
-              The skills I have:
-            </Row>
-            <Row>
-              {skills.map((skill, skillId) => {
-                return (
-                  <Col md = {4} sm = {4} key={skillId} className="skill">
-                    {skill.name}
-                  </Col>
-                )}
-              )}
-            </Row>
-          </Container>
-        </Col>
-      </Row>
-    </Container>
+    <CSSTransition key="about-title" in={show} timeout={2000} classNames="fade-in">
+      <Container id="about" className="about-board">
+        <Row>
+            <Col md = {{ size: 8, order: 2, offset: 1 }} className='board-title after-line'>
+              About Me
+            </Col>
+        </Row>
+        <Row>
+              <Col md = {6}>
+                <div className="avatar">
+                  <img src={prefix + portrait} alt="Avatar"></img>
+                </div>
+              </Col>
+              <Col md = {6}>
+                
+                <Container fluid={true} className="content-container">
+                  <Row className="content">
+                    {about}
+                  </Row>
+                  <Row className="skill-title">
+                    The skills I have:
+                  </Row>
+                  <Row>
+                    {skills.map((skill, skillId) => {
+                      return (
+                        <Col md = {4} sm = {4} key={skillId} className="skill">
+                          {skill.name}
+                        </Col>
+                      )}
+                    )}
+                  </Row>
+                </Container>
+              </Col>
+          </Row>
+      </Container>
+    </CSSTransition>
+
   )
 }
-function RenderWorks({works}) {
+
+function RenderWorks({works, show}) {
   if (!works) {
       return(
           <div></div>
       );
   }
   return (
+    <CSSTransition in={show} timeout={2000} classNames="fade-in">
       <Container id="work" className="work-board" > 
         
         <Row>
@@ -117,15 +167,17 @@ function RenderWorks({works}) {
           })}
         </Row>
       </Container>
+    </CSSTransition>
   );
 }
-function RenderProject({projects}) {
+function RenderProject({projects, show}) {
   if (!projects) {
       return(
           <div></div>
       );
   }
   return (
+    <CSSTransition in={show} timeout={2000} classNames="fade-in">
       <Container id="project" className="project-board"> 
         <Row className="justify-content-md-center board-title">
           <Col>Some Things I've Built</Col>
@@ -186,22 +238,25 @@ function RenderProject({projects}) {
             })}
         </Row>
       </Container>
+    </CSSTransition>
   );
 }
-function RenderContact({email, contact}) {
+function RenderContact({email, contact,show}) {
   return (
-    <Container id="contact" className="contact-board">
-      <Row className="justify-content-md-center board-title">
-        <Col className="before-line after-line">Get In Touch!</Col>
-      </Row>
-      <Row className="justify-content-center">
-        <Col className="contact-board-content">{contact}</Col>
-      </Row>
-      <Row className="justify-content-center contact-board-info">
-        <Col className="email">
-          <a href={'mailto:' + email} ><Button outline color="secondary" size="lg" >Say Hello!</Button></a>  
-        </Col>
-      </Row>
-    </Container>
+    <CSSTransition in={show} timeout={2000} classNames="fade-in">
+      <Container id="contact" className="contact-board">
+        <Row className="justify-content-md-center board-title">
+          <Col className="before-line after-line">Get In Touch!</Col>
+        </Row>
+        <Row className="justify-content-center">
+          <Col className="contact-board-content">{contact}</Col>
+        </Row>
+        <Row className="justify-content-center contact-board-info">
+          <Col className="email">
+            <a href={'mailto:' + email} ><Button outline color="secondary" size="lg" >Say Hello!</Button></a>  
+          </Col>
+        </Row>
+      </Container>
+    </CSSTransition>
   )
 }

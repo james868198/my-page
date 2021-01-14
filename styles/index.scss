@@ -197,7 +197,6 @@ $project-card-color:#EDEDED;
   min-height: 80vh;
   width: 80%;
   
-  
   .content-container {
     
     // .row {
@@ -348,20 +347,25 @@ $project-card-color:#EDEDED;
 
 // animation
 
-.example-enter {
-  opacity: 0.01;
+.fade-in-enter {
+  opacity: 0;
 }
-
-.example-enter.example-enter-active {
+.fade-in-enter-active {
   opacity: 1;
-  transition: opacity 500ms ease-in;
+  transition: opacity 2000ms;
 }
-
-.example-leave {
+.fade-in-enter-done {
+  opacity: 1;
+  transition: opacity 2000ms;
+}
+.fade-in-exit {
   opacity: 1;
 }
-
-.example-leave.example-leave-active {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
+.fade-in-exit-active {
+  opacity: 0;
+  transition: opacity 2000ms;
+}
+.fade-in-exit-done {
+  opacity: 0;
+  transition: opacity 2000ms;
 }

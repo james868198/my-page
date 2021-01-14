@@ -19,9 +19,10 @@ class Layout extends React.Component {
         // this.toggleModal = this.toggleModal.bind(this);
 
         this.state = {
-            isNavOpen: false
+            isNavOpen: false,
             // isModalOpen: false
         }
+        this.myRef = React.createRef()
     }
 
     toggleNav() {
@@ -34,7 +35,7 @@ class Layout extends React.Component {
             isMediaBarOpen: !this.state.isMediaBarOpen
         });
     }
-    
+   
     // toggleModal() {
     //     this.setState({
     //         isModalOpen: !this.state.isModalOpen
