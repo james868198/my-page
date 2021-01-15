@@ -18,6 +18,10 @@
     "react-particles-js": "^3.4.1",
     "react-transition-group": "^4.4.1",
     "reactstrap": "^8.8.1",
-    "sass": "^1.32.0"
+    "sass": "^1.32.0",
+    "styled-components": "^5.2.1"
+  },
+  "devDependencies": {
+    "babel-plugin-styled-components": "^1.12.0"
   }
 }
